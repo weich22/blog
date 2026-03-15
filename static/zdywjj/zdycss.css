@@ -1,53 +1,54 @@
-/* 强制背景显示 */
-body {
-    background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072') no-repeat center center fixed !important;
-    background-size: cover !important;
-    overflow: hidden !important;
-}
+(function() {
+    const runDesktopJS = () => {
+        const h = document.querySelector('#header');
+        const c = document.querySelector('#content') || document.querySelector('.main');
+        
+        if (!h) {
+            setTimeout(runDesktopJS, 300);
+            return;
+        }
 
-/* 标题栏 - 确保 z-index 足够高但低于按钮 */
-#header {
-    display: flex !important;
-    align-items: center !important;
-    position: fixed !important;
-    top: 40px;
-    left: 5%;
-    width: 90%;
-    height: 40px;
-    background: #dee1e6 !important;
-    border: 1px solid #999 !important;
-    border-radius: 8px 8px 0 0 !important;
-    padding: 0 15px !important;
-    z-index: 10001 !important; /* 提升层级 */
-    box-sizing: border-box !important;
-    overflow: visible !important; /* 关键：允许子元素溢出显示 */
-}
+        // 1. 注入桌面图标 (只注入一次)
+        if (!document.getElementById('my-desktop-icons')) {
+            const icons = document.createElement('div');
+            icons.id = 'my-desktop-icons';
+            icons.style.cssText = "position:fixed;top:100px;left:15px;z-index:500;display:flex;flex-direction:column;gap:15px;pointer-events:auto;";
+            
+            [{n:'必应',i:'https://www.bing.com/favicon.ico'},
+             {n:'GitHub',i:'https://github.githubassets.com/favicons/favicon.svg'}]
+            .forEach(o => {
+                const t = document.createElement('div');
+                t.style.textAlign = "center";
+                t.innerHTML = `<img src="${o.i}" style="width:35px;height:35px;border-radius:6px;box-shadow:0 2px 5px rgba(0,0,0,0.3);">
+                               <div style="color:white;font-size:10px;margin-top:2px;text-shadow:1px 1px 2px #000;">${o.n}</div>`;
+                icons.appendChild(t);
+            });
+            document.body.prepend(icons);
+        }
 
-/* 修正标题显示 */
-.blogTitle {
-    display: block !important;
-    font-size: 14px !important;
-    color: #333 !important;
-    margin-left: 10px !important;
-    flex: 1 !important;
-}
+        // 2. 注入控制按钮 (直接放入 header 末尾)
+        if (!document.getElementById('win-btn-group')) {
+            const btnGroup = document.createElement('div');
+            btnGroup.id = 'win-btn-group';
+            btnGroup.style.cssText = "display:flex;gap:12px;margin-left:10px;flex-shrink:0;z-index:10005;";
 
-/* 内容区域 */
-#content, .main, .list-content {
-    position: fixed !important;
-    top: 80px;
-    left: 5%;
-    width: 90%;
-    height: calc(100% - 120px);
-    background: #fff !important;
-    border: 1px solid #999 !important;
-    border-top: none !important;
-    border-radius: 0 0 8px 8px !important;
-    z-index: 10000 !important;
-    overflow-y: auto !important;
-    padding: 20px !important;
-    display: block !important;
-}
+            const acts = [
+                ['—', () => { if(c) c.style.display = (c.style.display==='none'?'block':'none'); }],
+                ['▢', () => { if(c){c.style.display='block'; c.style.left='5%'; c.style.top='84px';} h.style.left='5%'; h.style.top='40px'; }],
+                ['×', () => { location.reload(); }]
+            ];
 
-/* 彻底隐藏不需要的 */
-.title-right, .subTitle, #footer, .SideNav { display: none !important; }
+            acts.forEach(([txt, fn]) => {
+                const b = document.createElement('div');
+                b.innerText = txt;
+                b.style.cssText = "cursor:pointer;padding:5px 8px;font-size:16px;color:#5f6368;font-weight:bold;line-height:1;user-select:none;";
+                b.onclick = (e) => { e.preventDefault(); e.stopPropagation(); fn(); };
+                btnGroup.appendChild(b);
+            });
+            h.appendChild(btnGroup);
+        }
+    };
+
+    if (document.readyState === 'complete') runDesktopJS();
+    else window.addEventListener('load', runDesktopJS);
+})();
