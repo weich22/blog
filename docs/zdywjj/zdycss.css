@@ -1,0 +1,48 @@
+
+/* 桌面图标总容器 */
+#custom-desktop {
+    position: fixed;
+    top: 60px; /* 避开顶部导航条 */
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 1; /* 放在底层，文章列表通常 z-index 更高 */
+}
+
+/* 单个图标样式 */
+.desktop-icon {
+    width: 80px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.2s;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.desktop-icon:hover {
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.icon-img {
+    font-size: 30px;
+    margin-bottom: 5px;
+}
+
+.icon-text {
+    font-size: 12px;
+    color: #333;
+    text-shadow: 1px 1px 2px white;
+    font-weight: 500;
+}
+
+/* 确保文章列表容器有背景色或阴影，避免被桌面图标透过来干扰视觉 */
+.markdown-body, .SideNav {
+    position: relative;
+    z-index: 10; 
+    background-color: white !important;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
