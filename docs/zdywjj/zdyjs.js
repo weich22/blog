@@ -1,4 +1,3 @@
-
 (function(){
     // 获取 Gmeek 原生的三个核心区块
     const h = document.querySelector("#header"),
@@ -12,5 +11,5 @@
         // 如果有页脚，将其紧贴在主体下方
         if(f) c.parentNode.insertBefore(f, c.nextSibling);
     }
-    console.log("Gmeek-SimWindow-Deployed");
+    console.log("Window-Layout-Deployed-1200px");
 })();
