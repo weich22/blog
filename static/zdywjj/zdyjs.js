@@ -4,60 +4,66 @@ const myApps = [
 ];
 
 function initWinSystem() {
-    // 1. 提取 Gmeek 原生数据
-    const originalTitle = document.querySelector('.blogTitle')?.innerText || "我的博客";
-    const originalSub = document.querySelector('.blogTitle')?.nextElementSibling?.innerText || "";
-    const mainContent = document.querySelector('.main');
+    // 1. 获取原生内容（增加容错处理）
+    const getAvatar = () => document.querySelector('.avatar-user')?.src || "";
+    const getTitle = () => document.querySelector('.blogTitle')?.innerText || "Blog Title";
+    const getSub = () => document.querySelector('.blogTitle')?.nextElementSibling?.innerText || "";
 
-    // 2. 创建桌面图标
-    const desktop = document.createElement('div');
-    desktop.id = 'desktop-layer';
-    myApps.forEach(app => {
-        const item = document.createElement('div');
-        item.className = 'desktop-app';
-        item.innerHTML = `<img src="${app.img}"><span>${app.name}</span>`;
-        item.onclick = () => window.open(app.url, '_blank');
-        desktop.appendChild(item);
-    });
-    document.body.appendChild(desktop);
-
-    // 3. 创建仿真窗口结构
-    const winWrap = document.createElement('div');
-    winWrap.id = 'win-window';
-    winWrap.innerHTML = `
-        <div class="win-header">
-            <div class="win-title-area">${originalTitle}</div>
-            <div class="win-btns">
-                <button onclick="minWin()">—</button>
-                <button onclick="maxWin()">▢</button>
-                <button class="close-btn" onclick="closeWin()">×</button>
-            </div>
-        </div>
-        <div id="win-body">
-            <div style="text-align:center; padding: 20px 0; border-bottom: 1px dashed #eee;">
-                <h1 style="font-size:24px; margin-bottom:5px;">${originalTitle}</h1>
-                <p style="color:#666; font-size:14px;">${originalSub}</p>
-            </div>
-            <div id="real-content"></div>
-        </div>
-    `;
-    document.body.appendChild(winWrap);
-
-    // 4. 将 Gmeek 原生的文章列表真正地“塞进”窗口内部
-    const realContentContainer = document.getElementById('real-content');
-    if (mainContent && realContentContainer) {
-        realContentContainer.appendChild(mainContent);
+    // 2. 创建桌面图标层
+    if(!document.getElementById('desktop-layer')){
+        const desktop = document.createElement('div');
+        desktop.id = 'desktop-layer';
+        myApps.forEach(app => {
+            const item = document.createElement('div');
+            item.className = 'desktop-app';
+            item.innerHTML = `<img src="${app.img}"><span>${app.name}</span>`;
+            item.onclick = () => window.open(app.url, '_blank');
+            desktop.appendChild(item);
+        });
+        document.body.appendChild(desktop);
     }
+
+    // 3. 创建仿真窗口结构（如果已存在则不创建）
+    if(!document.getElementById('win-window')){
+        const winWrap = document.createElement('div');
+        winWrap.id = 'win-window';
+        winWrap.innerHTML = `
+            <div class="win-header">
+                <div class="win-title-area">Chromium - ${getTitle()}</div>
+                <div class="win-btns">
+                    <button onclick="minWin()">—</button>
+                    <button onclick="maxWin()">▢</button>
+                    <button class="close-btn" onclick="closeWin()">×</button>
+                </div>
+            </div>
+            <div class="win-nav-bar">
+                <img class="win-avatar" src="${getAvatar()}">
+                <div class="win-info">
+                    <span class="win-blog-name">${getTitle()}</span>
+                    <span class="win-blog-sub">${getSub()}</span>
+                </div>
+            </div>
+            <div id="win-body"></div>
+        `;
+        document.body.appendChild(winWrap);
+    }
+
+    // 4. 关键：持续检测并搬运文章列表 (解决显示在背景的问题)
+    const moveContent = () => {
+        const mainContent = document.querySelector('.main');
+        const winBody = document.getElementById('win-body');
+        if (mainContent && winBody && mainContent.parentElement !== winBody) {
+            winBody.appendChild(mainContent);
+            console.log("Content moved to window!");
+        }
+    };
+
+    // 执行搬运
+    setInterval(moveContent, 500); // 每半秒检查一次，防止 Gmeek 异步加载后又跳回背景
 }
 
-// 窗口交互函数
-function minWin() {
-    const win = document.getElementById('win-window');
-    win.style.opacity = '0';
-    win.style.transform = 'scale(0.9) translateY(20px)';
-    setTimeout(() => win.style.display = 'none', 300);
-}
-
+// 按钮逻辑保持不变
+function minWin() { document.getElementById('win-window').style.display = 'none'; }
 function maxWin() {
     const win = document.getElementById('win-window');
     if (win.style.width === '100%') {
@@ -66,14 +72,7 @@ function maxWin() {
         win.style.top = '0'; win.style.left = '0'; win.style.width = '100%'; win.style.height = '100%';
     }
 }
+function closeWin() { document.getElementById('win-window').style.display = 'none'; }
 
-function closeWin() {
-    document.getElementById('win-window').style.display = 'none';
-}
-
-// 页面加载完成后执行
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initWinSystem);
-} else {
-    initWinSystem();
-}
+// 启动
+initWinSystem();
