@@ -1,11 +1,11 @@
-/* 背景与桌面环境 */
+/* 强制背景显示 */
 body {
     background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072') no-repeat center center fixed !important;
     background-size: cover !important;
     overflow: hidden !important;
 }
 
-/* 模拟窗口标题栏 */
+/* 标题栏 - 确保 z-index 足够高但低于按钮 */
 #header {
     display: flex !important;
     align-items: center !important;
@@ -18,26 +18,21 @@ body {
     border: 1px solid #999 !important;
     border-radius: 8px 8px 0 0 !important;
     padding: 0 15px !important;
-    z-index: 1001 !important;
+    z-index: 10001 !important; /* 提升层级 */
     box-sizing: border-box !important;
+    overflow: visible !important; /* 关键：允许子元素溢出显示 */
 }
 
-/* 头像与标题排版 */
-.avatar {
-    width: 24px !important;
-    height: 24px !important;
-    margin-right: 10px !important;
-    flex-shrink: 0 !important;
-}
+/* 修正标题显示 */
 .blogTitle {
     display: block !important;
     font-size: 14px !important;
     color: #333 !important;
-    white-space: nowrap !important;
+    margin-left: 10px !important;
     flex: 1 !important;
 }
 
-/* 模拟窗口主体内容 */
+/* 内容区域 */
 #content, .main, .list-content {
     position: fixed !important;
     top: 80px;
@@ -48,13 +43,11 @@ body {
     border: 1px solid #999 !important;
     border-top: none !important;
     border-radius: 0 0 8px 8px !important;
-    z-index: 1000 !important;
+    z-index: 10000 !important;
     overflow-y: auto !important;
     padding: 20px !important;
-    box-sizing: border-box !important;
     display: block !important;
 }
 
-/* 隐藏冗余元素 */
-.title-right, .subTitle, #footer { display: none !important; }
-
+/* 彻底隐藏不需要的 */
+.title-right, .subTitle, #footer, .SideNav { display: none !important; }
