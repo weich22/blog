@@ -1,78 +1,47 @@
-const myApps = [
-    { name: '必应搜索', url: 'https://www.bing.com', img: 'https://www.bing.com/favicon.ico' },
-    { name: '谷歌搜索', url: 'https://www.google.com', img: 'https://www.google.com/favicon.ico' }
-];
-
-function initWinSystem() {
-    // 1. 获取原生内容（增加容错处理）
-    const getAvatar = () => document.querySelector('.avatar-user')?.src || "";
-    const getTitle = () => document.querySelector('.blogTitle')?.innerText || "Blog Title";
-    const getSub = () => document.querySelector('.blogTitle')?.nextElementSibling?.innerText || "";
-
-    // 2. 创建桌面图标层
-    if(!document.getElementById('desktop-layer')){
-        const desktop = document.createElement('div');
-        desktop.id = 'desktop-layer';
-        myApps.forEach(app => {
-            const item = document.createElement('div');
-            item.className = 'desktop-app';
-            item.innerHTML = `<img src="${app.img}"><span>${app.name}</span>`;
-            item.onclick = () => window.open(app.url, '_blank');
-            desktop.appendChild(item);
-        });
-        document.body.appendChild(desktop);
-    }
-
-    // 3. 创建仿真窗口结构（如果已存在则不创建）
-    if(!document.getElementById('win-window')){
-        const winWrap = document.createElement('div');
-        winWrap.id = 'win-window';
-        winWrap.innerHTML = `
-            <div class="win-header">
-                <div class="win-title-area">Chromium - ${getTitle()}</div>
-                <div class="win-btns">
-                    <button onclick="minWin()">—</button>
-                    <button onclick="maxWin()">▢</button>
-                    <button class="close-btn" onclick="closeWin()">×</button>
-                </div>
-            </div>
-            <div class="win-nav-bar">
-                <img class="win-avatar" src="${getAvatar()}">
-                <div class="win-info">
-                    <span class="win-blog-name">${getTitle()}</span>
-                    <span class="win-blog-sub">${getSub()}</span>
-                </div>
-            </div>
-            <div id="win-body"></div>
-        `;
-        document.body.appendChild(winWrap);
-    }
-
-    // 4. 关键：持续检测并搬运文章列表 (解决显示在背景的问题)
-    const moveContent = () => {
-        const mainContent = document.querySelector('.main');
-        const winBody = document.getElementById('win-body');
-        if (mainContent && winBody && mainContent.parentElement !== winBody) {
-            winBody.appendChild(mainContent);
-            console.log("Content moved to window!");
-        }
-    };
-
-    // 执行搬运
-    setInterval(moveContent, 500); // 每半秒检查一次，防止 Gmeek 异步加载后又跳回背景
+/* 基础背景与桌面初始化 */
+body {
+    background: url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=2070') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0; overflow: hidden; height: 100vh;
 }
 
-// 按钮逻辑保持不变
-function minWin() { document.getElementById('win-window').style.display = 'none'; }
-function maxWin() {
-    const win = document.getElementById('win-window');
-    if (win.style.width === '100%') {
-        win.style.top = '5%'; win.style.left = '10%'; win.style.width = '80%'; win.style.height = '85%';
-    } else {
-        win.style.top = '0'; win.style.left = '0'; win.style.width = '100%'; win.style.height = '100%';
-    }
+/* 核心模拟窗口 */
+#win-window {
+    position: fixed; z-index: 100; background: #ffffff;
+    display: flex; flex-direction: column;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 1px solid #999;
 }
-function closeWin() { document.getElementById('win-window').style.display = 'none'; }
 
-// 启动
-initWinSystem();
+/* 模拟标题栏 */
+.win-header {
+    height: 38px; background: #ebebeb; display: flex;
+    justify-content: space-between; align-items: center;
+    padding: 0 10px; border-bottom: 1px solid #ccc;
+}
+
+/* 窗口内部：个性签名区域（模拟导航条位置） */
+.win-nav-bar {
+    background: #f9f9f9; padding: 10px; border-bottom: 1px solid #eee;
+    display: flex; align-items: center; gap: 15px;
+}
+
+.win-avatar { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ddd; }
+.win-info { display: flex; flex-direction: column; }
+.win-blog-name { font-size: 16px; font-weight: bold; color: #333; }
+.win-blog-sub { font-size: 12px; color: #666; margin-top: 2px; }
+
+/* 窗口主体滚动区域 */
+#win-body { flex: 1; overflow-y: auto; padding: 15px; }
+
+/* 桌面图标层 */
+#desktop-layer { position: fixed; top: 40px; left: 20px; display: flex; flex-direction: column; gap: 20px; z-index: 1; }
+.desktop-app { width: 80px; display: flex; flex-direction: column; align-items: center; cursor: pointer; text-align: center; }
+.desktop-app img { width: 48px; height: 48px; border-radius: 8px; }
+.desktop-app span { color: white; font-size: 12px; text-shadow: 1px 1px 3px #000; margin-top: 5px; }
+
+/* 响应式 */
+@media (min-width: 992px) { #win-window { top: 5%; left: 10%; width: 80%; height: 85%; border-radius: 6px; } }
+@media (max-width: 991px) { #win-window { top: 0; left: 0; width: 100%; height: 100%; border-radius: 0; } }
+
+/* 彻底隐藏原生多余元素 */
+.Header, .avatar-user { display: none !important; }
