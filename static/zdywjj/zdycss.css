@@ -1,12 +1,12 @@
-/* --- 基础桌面环境 --- */
+/* --- 全局背景与锁定 --- */
 body {
     background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072') no-repeat center center fixed !important;
     background-size: cover !important;
-    overflow: hidden !important;
+    overflow: hidden !important; /* 锁定背景不滚动 */
     margin: 0;
 }
 
-/* --- 模拟窗口标题栏 --- */
+/* --- 窗口化标题栏 --- */
 #header {
     display: flex !important;
     flex-direction: row !important;
@@ -16,7 +16,7 @@ body {
     left: 5%;
     width: 90%;
     height: 44px;
-    background: #dee1e6 !important;
+    background: #dee1e6 !important; /* 类似 Chrome 标签栏的灰色 */
     border: 1px solid #999 !important;
     border-radius: 8px 8px 0 0 !important;
     padding: 0 10px !important;
@@ -24,20 +24,12 @@ body {
     box-sizing: border-box !important;
 }
 
-/* 找回原生搜索/标签按钮，并调整其样式 */
-.title-right {
-    display: flex !important;
-    align-items: center !important;
-    margin-left: auto !important; /* 强制推到最右边 */
-    order: 2 !important; /* 排在标题后面，按钮前面 */
-}
-
-/* 修复头像与标题 */
-.avatar {
-    width: 28px !important;
-    height: 28px !important;
-    margin-right: 8px !important;
-    flex-shrink: 0 !important;
+/* 头像与博客名排版 */
+.avatar { 
+    width: 28px !important; 
+    height: 28px !important; 
+    margin-right: 8px !important; 
+    flex-shrink: 0 !important; 
 }
 .blogTitle {
     display: inline-block !important;
@@ -46,26 +38,39 @@ body {
     white-space: nowrap !important;
     overflow: hidden;
     text-overflow: ellipsis;
-    flex-grow: 1 !important; /* 占据中间所有空间，把按钮顶到最后 */
+    flex-grow: 1 !important; /* 占据中间空间 */
     margin: 0 !important;
 }
 
-/* --- 文章列表内容区 --- */
-#content, .main, .list-content {
+/* 恢复 Gmeek 原生按钮区（搜索、标签等） */
+.title-right {
+    display: flex !important;
+    align-items: center !important;
+    margin-left: auto !important; /* 推到最右侧 */
+    gap: 12px !important;
+}
+
+/* --- 核心修复：文章列表窗口 --- */
+#content, .main, .list-content, .postList {
     display: block !important;
+    visibility: visible !important;
     position: fixed !important;
-    top: 84px;
-    left: 5%;
-    width: 90%;
-    height: calc(100% - 130px) !important;
+    top: 84px !important; /* header高度44 + top40 */
+    left: 5% !important;
+    width: 90% !important;
+    height: calc(100vh - 130px) !important;
     background: #fff !important;
     border: 1px solid #999 !important;
     border-top: none !important;
     border-radius: 0 0 8px 8px !important;
     z-index: 10000 !important;
-    overflow-y: auto !important;
+    overflow-y: auto !important; /* 启用内部滚动 */
     padding: 15px !important;
+    box-sizing: border-box !important;
 }
 
-/* 只隐藏多余的边角料 */
+/* 隐藏干扰元素 */
 .subTitle, #footer, .SideNav { display: none !important; }
+
+/* 搜索框弹出层级修正 */
+.search-form { z-index: 10002 !important; }
