@@ -9,13 +9,13 @@ body {
 /* --- 模拟窗口标题栏 --- */
 #header {
     display: flex !important;
-    flex-direction: row !important; /* 强制横向排列 */
+    flex-direction: row !important;
     align-items: center !important;
     position: fixed !important;
     top: 40px;
     left: 5%;
     width: 90%;
-    height: 44px; /* 稍微加高一点方便点击 */
+    height: 44px;
     background: #dee1e6 !important;
     border: 1px solid #999 !important;
     border-radius: 8px 8px 0 0 !important;
@@ -24,7 +24,15 @@ body {
     box-sizing: border-box !important;
 }
 
-/* 修复头像与标题在一行 */
+/* 找回原生搜索/标签按钮，并调整其样式 */
+.title-right {
+    display: flex !important;
+    align-items: center !important;
+    margin-left: auto !important; /* 强制推到最右边 */
+    order: 2 !important; /* 排在标题后面，按钮前面 */
+}
+
+/* 修复头像与标题 */
 .avatar {
     width: 28px !important;
     height: 28px !important;
@@ -35,10 +43,10 @@ body {
     display: inline-block !important;
     font-size: 14px !important;
     color: #333 !important;
+    white-space: nowrap !important;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
-    flex: 1 !important;
+    flex-grow: 1 !important; /* 占据中间所有空间，把按钮顶到最后 */
     margin: 0 !important;
 }
 
@@ -46,7 +54,7 @@ body {
 #content, .main, .list-content {
     display: block !important;
     position: fixed !important;
-    top: 84px; /* header高度44 + top40 */
+    top: 84px;
     left: 5%;
     width: 90%;
     height: calc(100% - 130px) !important;
@@ -57,8 +65,7 @@ body {
     z-index: 10000 !important;
     overflow-y: auto !important;
     padding: 15px !important;
-    box-sizing: border-box !important;
 }
 
-/* 彻底清除可能挡住点击的元素 */
-.title-right, .subTitle, #footer, .SideNav, .Header-item--full { display: none !important; }
+/* 只隐藏多余的边角料 */
+.subTitle, #footer, .SideNav { display: none !important; }

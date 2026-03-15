@@ -8,29 +8,26 @@
             return;
         }
 
-        // 1. 注入桌面图标 (只注入一次)
+        // 1. 注入桌面图标
         if (!document.getElementById('my-desktop-icons')) {
             const icons = document.createElement('div');
             icons.id = 'my-desktop-icons';
             icons.style.cssText = "position:fixed;top:100px;left:15px;z-index:500;display:flex;flex-direction:column;gap:15px;pointer-events:auto;";
-            
-            [{n:'必应',i:'https://www.bing.com/favicon.ico'},
-             {n:'GitHub',i:'https://github.githubassets.com/favicons/favicon.svg'}]
+            [{n:'必应',i:'https://www.bing.com/favicon.ico'},{n:'GitHub',i:'https://github.githubassets.com/favicons/favicon.svg'}]
             .forEach(o => {
                 const t = document.createElement('div');
                 t.style.textAlign = "center";
-                t.innerHTML = `<img src="${o.i}" style="width:35px;height:35px;border-radius:6px;box-shadow:0 2px 5px rgba(0,0,0,0.3);">
-                               <div style="color:white;font-size:10px;margin-top:2px;text-shadow:1px 1px 2px #000;">${o.n}</div>`;
+                t.innerHTML = `<img src="${o.i}" style="width:35px;height:35px;border-radius:6px;box-shadow:0 2px 5px rgba(0,0,0,0.3);"><div style="color:white;font-size:10px;margin-top:2px;text-shadow:1px 1px 2px #000;">${o.n}</div>`;
                 icons.appendChild(t);
             });
             document.body.prepend(icons);
         }
 
-        // 2. 注入控制按钮 (直接放入 header 末尾)
+        // 2. 注入控制按钮 (增加 order 确保排在最后)
         if (!document.getElementById('win-btn-group')) {
             const btnGroup = document.createElement('div');
             btnGroup.id = 'win-btn-group';
-            btnGroup.style.cssText = "display:flex;gap:12px;margin-left:10px;flex-shrink:0;z-index:10005;";
+            btnGroup.style.cssText = "display:flex;gap:10px;margin-left:10px;flex-shrink:0;z-index:10005;order:3 !important;";
 
             const acts = [
                 ['—', () => { if(c) c.style.display = (c.style.display==='none'?'block':'none'); }],
@@ -41,7 +38,7 @@
             acts.forEach(([txt, fn]) => {
                 const b = document.createElement('div');
                 b.innerText = txt;
-                b.style.cssText = "cursor:pointer;padding:5px 8px;font-size:16px;color:#5f6368;font-weight:bold;line-height:1;user-select:none;";
+                b.style.cssText = "cursor:pointer;padding:5px 5px;font-size:16px;color:#5f6368;font-weight:bold;line-height:1;user-select:none;";
                 b.onclick = (e) => { e.preventDefault(); e.stopPropagation(); fn(); };
                 btnGroup.appendChild(b);
             });
