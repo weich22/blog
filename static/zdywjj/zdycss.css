@@ -1,106 +1,70 @@
-/* 1. 背景与全局锁定 */
+/* 1. 强制背景与桌面布局 */
 body {
-    background: url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=2070') no-repeat center center fixed;
-    background-size: cover;
+    background: url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=2070') no-repeat center center fixed !important;
+    background-size: cover !important;
     margin: 0; overflow: hidden; height: 100vh;
 }
 
-/* 2. 修复 Header 层次：头像、标题、签名 */
-#header {
-    position: fixed !important;
-    top: 20px;
-    left: 10%;
-    width: 80%;
-    display: flex !important;
-    align-items: center;
-    z-index: 20; /* 确保在最前面 */
-    padding: 10px !important;
-    background: rgba(255,255,255,0.8);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-}
-
-/* 解决标题看不见的问题：强制让标题显示在头像右侧 */
-.title-left {
-    display: flex !important;
-    align-items: center;
-    flex-direction: row !important; 
-}
-
-.avatar-user {
-    width: 48px !important;
-    height: 48px !important;
-    margin-right: 15px !important;
-}
-
-.blogTitle {
-    font-size: 20px !important;
-    color: #333 !important;
-    display: block !important;
-}
-
-/* 3. 核心窗口：将 .main 装饰成带按钮的窗口 */
+/* 2. 模拟窗口 (.main) 的高级装饰 */
 .main {
     position: fixed !important;
-    top: 110px; /* 留出 Header 的空间 */
-    left: 10%;
-    width: 80%;
-    height: calc(100vh - 160px);
+    top: 110px !important;
+    left: 10% !important;
+    width: 80% !important;
+    height: calc(100vh - 160px) !important;
     background: #ffffff !important;
-    border: 1px solid #999;
-    border-radius: 0 0 8px 8px; /* 底部圆角 */
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    z-index: 10;
+    border: 1px solid #999 !important;
+    border-radius: 0 0 8px 8px !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5) !important;
+    z-index: 100 !important;
     overflow-y: auto !important;
-    padding: 50px 20px 20px 20px !important; /* 顶部留 50px 给伪元素标题栏 */
+    padding: 50px 20px 20px 20px !important;
 }
 
-/* 模拟窗口顶部的标题栏 */
+/* 3. 强行画出按钮和标题栏 (利用伪元素，不依赖 JS) */
 .main::before {
-    content: "Chromium - 博客列表";
-    position: fixed; /* 固定在窗口顶部 */
-    top: 110px;
-    left: 10%;
-    width: 80%;
-    height: 35px;
-    background: #ebebeb;
-    border: 1px solid #999;
-    border-bottom: 1px solid #ccc;
-    border-radius: 8px 8px 0 0;
-    display: flex;
-    align-items: center;
-    padding-left: 15px;
-    font-size: 13px;
-    color: #444;
-    z-index: 15;
-    box-sizing: border-box;
+    content: "Chromium - 博客列表" !important;
+    position: fixed !important;
+    top: 110px !important;
+    left: 10% !important;
+    width: 80% !important;
+    height: 35px !important;
+    background: #ebebeb !important;
+    border: 1px solid #999 !important;
+    border-bottom: 1px solid #ccc !important;
+    border-radius: 8px 8px 0 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    padding-left: 15px !important;
+    font-size: 13px !important;
+    color: #444 !important;
+    z-index: 101 !important;
 }
 
-/* 模拟右上角控制按钮 (— ▢ ×) */
+/* 右上角按钮 (— ▢ ×) */
 .main::after {
-    content: "—  ▢  ×";
-    position: fixed;
-    top: 110px;
-    right: 10%;
-    width: 100px;
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    color: #666;
-    z-index: 16;
-    cursor: default;
-    letter-spacing: 8px;
+    content: "—  ▢  ×" !important;
+    position: fixed !important;
+    top: 110px !important;
+    right: 10.5% !important;
+    width: 100px !important;
+    height: 35px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-size: 16px !important;
+    color: #333 !important;
+    z-index: 102 !important;
+    letter-spacing: 8px !important;
 }
 
-/* 隐藏原生干扰 */
-#footer { display: none !important; }
-
-/* 移动端全屏处理 */
-@media (max-width: 991px) {
-    .main, #header, .main::before { width: 100% !important; left: 0 !important; border-radius: 0; }
-    .main { top: 70px; height: calc(100vh - 70px); }
-    .main::before, .main::after { top: 70px; }
-    #header { top: 0; height: 60px; }
+/* 桌面图标容器样式 */
+#desktop-layer {
+    position: fixed !important;
+    top: 40px !important;
+    left: 20px !important;
+    z-index: 10 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
 }
