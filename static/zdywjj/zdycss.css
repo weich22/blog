@@ -1,23 +1,13 @@
-/* --- 1. 全屏“流金”动态背景 (修复黑块) --- */
+/* --- 1. 回归全屏流金背景 --- */
 body {
     margin: 0;
     padding: 0;
-    background: #000;
-    min-height: 100vh;
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* 流金质感渐变 */
-    background: linear-gradient(125deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
-    background-size: 400% 400%;
-    z-index: -1;
+    /* 强力清除所有背景色，让流金透出来 */
+    background: linear-gradient(125deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c) !important;
+    background-size: 400% 400% !important;
+    background-attachment: fixed !important; /* 关键：固定背景，不随滚动条走 */
     animation: goldFlow 12s ease infinite;
+    overflow-x: hidden !important;
 }
 
 @keyframes goldFlow {
@@ -26,35 +16,17 @@ body::before {
     100% { background-position: 0% 50%; }
 }
 
-/* --- 2. 模拟窗口化布局 --- */
-/* 内容容器：模拟窗口主体 */
-#content, .main, .list-content, .postList {
-    display: block !important;
-    visibility: visible !important;
-    position: relative !important;
-    width: 92% !important;
-    max-width: 1000px;
-    margin: 100px auto 40px auto !important; /* 顶部留出标题栏位置 */
-    background: rgba(255, 255, 255, 0.98) !important;
-    border: 1px solid #999 !important;
-    border-top: none !important;
-    border-radius: 0 0 8px 8px !important;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.4) !important;
-    padding: 20px !important;
-    z-index: 100;
-}
-
-/* 模拟 Windows 标题栏：紧贴内容区上方 */
+/* --- 2. 模拟窗口样式 (视觉模拟) --- */
+/* 标题栏：紧贴在内容框顶部 */
 #header {
     display: flex !important;
-    flex-direction: row !important;
     align-items: center !important;
-    position: absolute !important;
-    bottom: 100%; /* 吸附在内容框顶部 */
-    left: -1px;
-    width: calc(100% + 2px) !important;
+    position: relative !important; /* 回归相对定位，最稳 */
+    width: 92% !important;
+    max-width: 900px;
     height: 40px !important;
-    background: #dee1e6 !important; /* Windows 经典淡灰色 */
+    margin: 40px auto 0 auto !important; /* 顶部留白 */
+    background: #dee1e6 !important;
     border: 1px solid #999 !important;
     border-radius: 8px 8px 0 0 !important;
     padding: 0 12px !important;
@@ -62,25 +34,29 @@ body::before {
     z-index: 101;
 }
 
-/* 标题栏文字与头像 */
+/* 内容框：文章列表显示区 */
+#content, .main, .list-content, .postList {
+    display: block !important;
+    visibility: visible !important;
+    position: relative !important;
+    width: 92% !important;
+    max-width: 900px;
+    margin: 0 auto 30px auto !important; /* 紧接在标题栏下面 */
+    background: rgba(255, 255, 255, 0.98) !important;
+    border: 1px solid #999 !important;
+    border-top: none !important;
+    border-radius: 0 0 8px 8px !important;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3) !important;
+    padding: 20px !important;
+    min-height: 50vh;
+    z-index: 100;
+}
+
+/* 博客标题和原生按钮 */
 .avatar { width: 22px !important; height: 22px !important; margin-right: 8px !important; }
-.blogTitle { 
-    font-size: 14px !important; 
-    color: #333 !important; 
-    flex-grow: 1 !important;
-    margin: 0 !important;
-    white-space: nowrap !important;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+.blogTitle { font-size: 14px !important; color: #333 !important; flex-grow: 1 !important; margin: 0 !important; }
+.title-right { display: flex !important; align-items: center !important; margin-left: auto !important; gap: 10px !important; }
 
-/* 核心：把所有空间留给 Gmeek 原生按钮 */
-.title-right {
-    display: flex !important;
-    align-items: center !important;
-    margin-left: auto !important; 
-    gap: 12px !important;
-}
-
-/* 隐藏无关元素 */
+/* 彻底清理黑块源头 */
+#main, .Gmeek-mainindex { background: transparent !important; }
 .subTitle, #footer, .SideNav { display: none !important; }
