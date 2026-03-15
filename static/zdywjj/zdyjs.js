@@ -1,15 +1,18 @@
 (function(){
-    // 获取 Gmeek 原生的三个核心区块
+    // 1. 获取 头部、主体、底部 元素
     const h = document.querySelector("#header"),
           c = document.querySelector("#content") || document.querySelector(".main"),
           f = document.querySelector("#footer");
     
-    // 如果头部和主体都存在，则进行结构重排
     if(h && c){
-        // 将头部移到主体上方
+        // 2. 将头部搬运到主体上方
         c.parentNode.insertBefore(h, c);
-        // 如果有页脚，将其紧贴在主体下方
+        
+        // 3. 【关键改动】将右侧按钮组挪到 header 的末尾，方便 CSS 绝对定位固定它
+        const tr = h.querySelector(".title-right");
+        if(tr) h.appendChild(tr);
+        
+        // 4. 将底部搬运到主体下方
         if(f) c.parentNode.insertBefore(f, c.nextSibling);
     }
-    console.log("Window-Layout-Deployed-1200px");
 })();
