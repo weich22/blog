@@ -1,53 +1,64 @@
-/* 强制背景显示 */
+/* --- 基础桌面环境 --- */
 body {
     background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072') no-repeat center center fixed !important;
     background-size: cover !important;
     overflow: hidden !important;
+    margin: 0;
 }
 
-/* 标题栏 - 确保 z-index 足够高但低于按钮 */
+/* --- 模拟窗口标题栏 --- */
 #header {
     display: flex !important;
+    flex-direction: row !important; /* 强制横向排列 */
     align-items: center !important;
     position: fixed !important;
     top: 40px;
     left: 5%;
     width: 90%;
-    height: 40px;
+    height: 44px; /* 稍微加高一点方便点击 */
     background: #dee1e6 !important;
     border: 1px solid #999 !important;
     border-radius: 8px 8px 0 0 !important;
-    padding: 0 15px !important;
-    z-index: 10001 !important; /* 提升层级 */
+    padding: 0 10px !important;
+    z-index: 10001 !important;
     box-sizing: border-box !important;
-    overflow: visible !important; /* 关键：允许子元素溢出显示 */
 }
 
-/* 修正标题显示 */
+/* 修复头像与标题在一行 */
+.avatar {
+    width: 28px !important;
+    height: 28px !important;
+    margin-right: 8px !important;
+    flex-shrink: 0 !important;
+}
 .blogTitle {
-    display: block !important;
+    display: inline-block !important;
     font-size: 14px !important;
     color: #333 !important;
-    margin-left: 10px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     flex: 1 !important;
+    margin: 0 !important;
 }
 
-/* 内容区域 */
+/* --- 文章列表内容区 --- */
 #content, .main, .list-content {
+    display: block !important;
     position: fixed !important;
-    top: 80px;
+    top: 84px; /* header高度44 + top40 */
     left: 5%;
     width: 90%;
-    height: calc(100% - 120px);
+    height: calc(100% - 130px) !important;
     background: #fff !important;
     border: 1px solid #999 !important;
     border-top: none !important;
     border-radius: 0 0 8px 8px !important;
     z-index: 10000 !important;
     overflow-y: auto !important;
-    padding: 20px !important;
-    display: block !important;
+    padding: 15px !important;
+    box-sizing: border-box !important;
 }
 
-/* 彻底隐藏不需要的 */
-.title-right, .subTitle, #footer, .SideNav { display: none !important; }
+/* 彻底清除可能挡住点击的元素 */
+.title-right, .subTitle, #footer, .SideNav, .Header-item--full { display: none !important; }

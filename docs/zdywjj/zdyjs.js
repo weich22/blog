@@ -1,63 +1,54 @@
 (function() {
-    const initDesktopUI = () => {
+    const runDesktopJS = () => {
         const h = document.querySelector('#header');
         const c = document.querySelector('#content') || document.querySelector('.main');
         
-        // 如果 header 还没出来，脚本不退出，等 500ms 再试一次
         if (!h) {
-            setTimeout(initDesktopUI, 500);
+            setTimeout(runDesktopJS, 300);
             return;
         }
 
-        // 1. 生成桌面图标 (确保在 body 最前面)
-        if (!document.querySelector('#desktop-icons')) {
+        // 1. 注入桌面图标 (只注入一次)
+        if (!document.getElementById('my-desktop-icons')) {
             const icons = document.createElement('div');
-            icons.id = 'desktop-icons';
-            icons.style.cssText = "position:fixed;top:100px;left:20px;z-index:9999;display:flex;flex-direction:column;gap:20px;pointer-events:auto;";
+            icons.id = 'my-desktop-icons';
+            icons.style.cssText = "position:fixed;top:100px;left:15px;z-index:500;display:flex;flex-direction:column;gap:15px;pointer-events:auto;";
             
-            const iconList = [
-                {n:'必应', i:'https://www.bing.com/favicon.ico'},
-                {n:'GitHub', i:'https://github.githubassets.com/favicons/favicon.svg'}
-            ];
-
-            iconList.forEach(o => {
+            [{n:'必应',i:'https://www.bing.com/favicon.ico'},
+             {n:'GitHub',i:'https://github.githubassets.com/favicons/favicon.svg'}]
+            .forEach(o => {
                 const t = document.createElement('div');
                 t.style.textAlign = "center";
-                t.innerHTML = `<img src="${o.i}" style="width:40px;height:40px;border-radius:8px;box-shadow:0 4px 8px rgba(0,0,0,0.3);">
-                               <div style="color:white;font-size:11px;margin-top:4px;text-shadow:1px 1px 2px #000;">${o.n}</div>`;
+                t.innerHTML = `<img src="${o.i}" style="width:35px;height:35px;border-radius:6px;box-shadow:0 2px 5px rgba(0,0,0,0.3);">
+                               <div style="color:white;font-size:10px;margin-top:2px;text-shadow:1px 1px 2px #000;">${o.n}</div>`;
                 icons.appendChild(t);
             });
-            document.body.appendChild(icons);
+            document.body.prepend(icons);
         }
 
-        // 2. 生成右上角控制按钮 (强制插入到 header)
-        if (!document.querySelector('#win-controls')) {
-            const bts = document.createElement('div');
-            bts.id = 'win-controls';
-            // 使用 fixed 相对屏幕定位，避免被 header 的 overflow 裁剪
-            bts.style.cssText = "position:fixed;top:40px;right:6%;display:flex;gap:15px;height:40px;align-items:center;z-index:10002;pointer-events:auto;";
-            
-            const actions = [
-                ['—', () => { if (c) c.style.display = (c.style.display === 'none' ? 'block' : 'none'); }], 
-                ['▢', () => { if(c){c.style.display='block'; c.style.left='5%'; c.style.top='80px';} h.style.left='5%'; h.style.top='40px'; }], 
+        // 2. 注入控制按钮 (直接放入 header 末尾)
+        if (!document.getElementById('win-btn-group')) {
+            const btnGroup = document.createElement('div');
+            btnGroup.id = 'win-btn-group';
+            btnGroup.style.cssText = "display:flex;gap:12px;margin-left:10px;flex-shrink:0;z-index:10005;";
+
+            const acts = [
+                ['—', () => { if(c) c.style.display = (c.style.display==='none'?'block':'none'); }],
+                ['▢', () => { if(c){c.style.display='block'; c.style.left='5%'; c.style.top='84px';} h.style.left='5%'; h.style.top='40px'; }],
                 ['×', () => { location.reload(); }]
             ];
 
-            actions.forEach(([txt, fn]) => {
-                const b = document.createElement('span');
+            acts.forEach(([txt, fn]) => {
+                const b = document.createElement('div');
                 b.innerText = txt;
-                b.style.cssText = "cursor:pointer;font-size:18px;color:#5f6368;padding:5px 10px;font-family:sans-serif;font-weight:bold;user-select:none;";
-                b.onclick = (e) => { e.stopPropagation(); fn(); };
-                bts.appendChild(b);
+                b.style.cssText = "cursor:pointer;padding:5px 8px;font-size:16px;color:#5f6368;font-weight:bold;line-height:1;user-select:none;";
+                b.onclick = (e) => { e.preventDefault(); e.stopPropagation(); fn(); };
+                btnGroup.appendChild(b);
             });
-            document.body.appendChild(bts); // 改为挂载到 body，防止被 header 遮挡
+            h.appendChild(btnGroup);
         }
     };
 
-    // 页面加载完成后运行
-    if (document.readyState === 'complete') {
-        initDesktopUI();
-    } else {
-        window.addEventListener('load', initDesktopUI);
-    }
+    if (document.readyState === 'complete') runDesktopJS();
+    else window.addEventListener('load', runDesktopJS);
 })();
