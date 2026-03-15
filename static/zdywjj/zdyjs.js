@@ -1,24 +1,22 @@
 (function() {
-    const cleanUpLayout = () => {
+    const fixLayout = () => {
         const h = document.querySelector('#header');
-        if (!h) {
-            // 如果页面还没加载完，循环检查
-            setTimeout(cleanUpLayout, 300);
-            return;
+        const c = document.querySelector('#content') || document.querySelector('.main');
+        
+        if (h && c) {
+            // 将标题栏移动到内容区同级，方便 CSS 绝对定位吸附
+            c.parentNode.insertBefore(h, c);
+            
+            // 彻底移除之前可能产生的任何自定义按钮组
+            const customBtns = document.querySelectorAll('[id*="win-btn"], [id*="mock-btn"]');
+            customBtns.forEach(el => el.remove());
+
+            console.log("Layout fixed: Window style applied, custom buttons removed.");
+        } else {
+            setTimeout(fixLayout, 300);
         }
-
-        // 1. 移除自定义按钮（如果之前存在）
-        const oldBtns = document.getElementById('win-btn-group');
-        if (oldBtns) oldBtns.remove();
-
-        // 2. 移除背景桌面图标
-        const oldIcons = document.getElementById('my-desktop-icons');
-        if (oldIcons) oldIcons.remove();
-
-        console.log("UI Cleaned: Simulation buttons and icons removed.");
     };
 
-    // 确保在页面渲染后执行
-    if (document.readyState === 'complete') cleanUpLayout();
-    else window.addEventListener('load', cleanUpLayout);
+    if (document.readyState === 'complete') fixLayout();
+    else window.addEventListener('load', fixLayout);
 })();
