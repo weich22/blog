@@ -2,6 +2,6 @@
     "title":"Blog Title",
     "subTitle":"移植测试博客",
     "avatarUrl":"https://github.githubassets.com/favicons/favicon.svg",
-    "allHead":"",
+    "allHead":"<link rel=\"stylesheet\" href='/zdywjj/zdycss.css'><script src='/zdywjj/zdyjs.js'></script>",
     "GMEEK_VERSION":"last"
 }
