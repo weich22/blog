@@ -1,1 +1,60 @@
+/* 背景与桌面环境 */
+body {
+    background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072') no-repeat center center fixed !important;
+    background-size: cover !important;
+    overflow: hidden !important;
+}
+
+/* 模拟窗口标题栏 */
+#header {
+    display: flex !important;
+    align-items: center !important;
+    position: fixed !important;
+    top: 40px;
+    left: 5%;
+    width: 90%;
+    height: 40px;
+    background: #dee1e6 !important;
+    border: 1px solid #999 !important;
+    border-radius: 8px 8px 0 0 !important;
+    padding: 0 15px !important;
+    z-index: 1001 !important;
+    box-sizing: border-box !important;
+}
+
+/* 头像与标题排版 */
+.avatar {
+    width: 24px !important;
+    height: 24px !important;
+    margin-right: 10px !important;
+    flex-shrink: 0 !important;
+}
+.blogTitle {
+    display: block !important;
+    font-size: 14px !important;
+    color: #333 !important;
+    white-space: nowrap !important;
+    flex: 1 !important;
+}
+
+/* 模拟窗口主体内容 */
+#content, .main, .list-content {
+    position: fixed !important;
+    top: 80px;
+    left: 5%;
+    width: 90%;
+    height: calc(100% - 120px);
+    background: #fff !important;
+    border: 1px solid #999 !important;
+    border-top: none !important;
+    border-radius: 0 0 8px 8px !important;
+    z-index: 1000 !important;
+    overflow-y: auto !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+    display: block !important;
+}
+
+/* 隐藏冗余元素 */
+.title-right, .subTitle, #footer { display: none !important; }
 
