@@ -1,32 +1,32 @@
-// 1. 桌面图标配置
-const myLinks = [
-    { name: '必应', url: 'https://www.bing.com', icon: 'https://www.bing.com/favicon.ico' },
-    { name: '谷歌', url: 'https://www.google.com', icon: 'https://www.google.com/favicon.ico' }
+const customApps = [
+    { name: '必应搜索', url: 'https://www.bing.com', img: 'https://www.bing.com/favicon.ico' },
+    { name: '谷歌搜索', url: 'https://www.google.com', img: 'https://www.google.com/favicon.ico' }
 ];
 
-function setupDesktop() {
-    // 插入图标链接
+function injectDesktop() {
+    // 检查是否已经存在图标层，防止重复插入
+    if (document.getElementById('desktop-layer')) return;
+
     const desktop = document.createElement('div');
     desktop.id = 'desktop-layer';
-    myLinks.forEach(link => {
-        const div = document.createElement('div');
-        div.className = 'desktop-app';
-        div.innerHTML = `<img src="${link.icon}"><span>${link.name}</span>`;
-        div.onclick = () => window.open(link.url, '_blank');
-        desktop.appendChild(div);
-    });
-    document.body.appendChild(desktop);
 
-    // 动态确保个性签名显示（如果原生的没显示出来）
-    const title = document.querySelector('.blogTitle');
-    if (title) {
-        title.innerHTML += `<span style="font-size:12px; font-weight:normal; display:block; color:#666;">没有用功努力,不做没用的功！weich22.github.io</span>`;
-    }
+    customApps.forEach(app => {
+        const item = document.createElement('div');
+        item.style.cssText = "display:flex;flex-direction:column;align-items:center;cursor:pointer;width:70px;";
+        item.innerHTML = `
+            <img src="${app.img}" style="width:45px;height:45px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.3);">
+            <span style="color:white;font-size:12px;margin-top:5px;text-shadow:1px 1px 2px #000;">${app.name}</span>
+        `;
+        item.onclick = () => window.open(app.url, '_blank');
+        desktop.appendChild(item);
+    });
+
+    document.body.appendChild(desktop);
 }
 
-// 确保在页面加载后执行
+// 兼容 Gmeek 加载机制
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupDesktop);
+    document.addEventListener('DOMContentLoaded', injectDesktop);
 } else {
-    setupDesktop();
+    injectDesktop();
 }
