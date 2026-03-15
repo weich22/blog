@@ -1,47 +1,56 @@
-/* 基础背景与桌面初始化 */
+/* 1. 全局背景 */
 body {
     background: url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=2070') no-repeat center center fixed;
     background-size: cover;
-    margin: 0; overflow: hidden; height: 100vh;
+    margin: 0; padding: 0;
+    overflow: hidden; /* 防止背景滚动 */
 }
 
-/* 核心模拟窗口 */
-#win-window {
-    position: fixed; z-index: 100; background: #ffffff;
-    display: flex; flex-direction: column;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.5); border: 1px solid #999;
+/* 2. 把 Gmeek 的主容器模拟成“窗口” */
+.main {
+    position: fixed;
+    top: 100px; /* 给顶部留出空间显示个性签名 */
+    left: 10%;
+    width: 80%;
+    height: 75vh;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #999;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    border-radius: 8px;
+    overflow-y: auto; /* 只有窗口内滚动 */
+    z-index: 10;
 }
 
-/* 模拟标题栏 */
-.win-header {
-    height: 38px; background: #ebebeb; display: flex;
-    justify-content: space-between; align-items: center;
-    padding: 0 10px; border-bottom: 1px solid #ccc;
+/* 3. 模拟 weich.ee 的导航栏/标题区域 */
+.Header {
+    position: fixed;
+    top: 20px;
+    left: 10%;
+    width: 80%;
+    display: flex !important;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    border-radius: 50px; /* 椭圆导航条感 */
+    z-index: 11;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-/* 窗口内部：个性签名区域（模拟导航条位置） */
-.win-nav-bar {
-    background: #f9f9f9; padding: 10px; border-bottom: 1px solid #eee;
-    display: flex; align-items: center; gap: 15px;
+/* 隐藏 Gmeek 原生多余的头部装饰 */
+.Header-item { margin-right: 15px !important; }
+.avatar-user { width: 40px !important; height: 40px !important; }
+.blogTitle { font-size: 18px !important; color: #333 !important; }
+
+/* 4. 适配移动端：全屏化 */
+@media (max-width: 600px) {
+    .main, .Header { width: 100%; left: 0; border-radius: 0; }
+    .main { top: 60px; height: calc(100vh - 60px); }
+    .Header { top: 0; padding: 5px 10px; }
 }
 
-.win-avatar { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ddd; }
-.win-info { display: flex; flex-direction: column; }
-.win-blog-name { font-size: 16px; font-weight: bold; color: #333; }
-.win-blog-sub { font-size: 12px; color: #666; margin-top: 2px; }
-
-/* 窗口主体滚动区域 */
-#win-body { flex: 1; overflow-y: auto; padding: 15px; }
-
-/* 桌面图标层 */
-#desktop-layer { position: fixed; top: 40px; left: 20px; display: flex; flex-direction: column; gap: 20px; z-index: 1; }
-.desktop-app { width: 80px; display: flex; flex-direction: column; align-items: center; cursor: pointer; text-align: center; }
-.desktop-app img { width: 48px; height: 48px; border-radius: 8px; }
-.desktop-app span { color: white; font-size: 12px; text-shadow: 1px 1px 3px #000; margin-top: 5px; }
-
-/* 响应式 */
-@media (min-width: 992px) { #win-window { top: 5%; left: 10%; width: 80%; height: 85%; border-radius: 6px; } }
-@media (max-width: 991px) { #win-window { top: 0; left: 0; width: 100%; height: 100%; border-radius: 0; } }
-
-/* 彻底隐藏原生多余元素 */
-.Header, .avatar-user { display: none !important; }
+/* 5. 桌面图标的 CSS 保持不变 */
+#desktop-layer { position: fixed; top: 40px; left: 20px; z-index: 1; }
+.desktop-app { margin-bottom: 20px; text-align: center; cursor: pointer; }
+.desktop-app img { width: 45px; border-radius: 8px; }
+.desktop-app span { display: block; color: white; font-size: 12px; text-shadow: 1px 1px 2px #000; }
