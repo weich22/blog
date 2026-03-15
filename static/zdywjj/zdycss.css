@@ -1,54 +1,64 @@
-(function() {
-    const runDesktopJS = () => {
-        const h = document.querySelector('#header');
-        const c = document.querySelector('#content') || document.querySelector('.main');
-        
-        if (!h) {
-            setTimeout(runDesktopJS, 300);
-            return;
-        }
+/* --- 基础桌面环境 --- */
+body {
+    background: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072') no-repeat center center fixed !important;
+    background-size: cover !important;
+    overflow: hidden !important;
+    margin: 0;
+}
 
-        // 1. 注入桌面图标 (只注入一次)
-        if (!document.getElementById('my-desktop-icons')) {
-            const icons = document.createElement('div');
-            icons.id = 'my-desktop-icons';
-            icons.style.cssText = "position:fixed;top:100px;left:15px;z-index:500;display:flex;flex-direction:column;gap:15px;pointer-events:auto;";
-            
-            [{n:'必应',i:'https://www.bing.com/favicon.ico'},
-             {n:'GitHub',i:'https://github.githubassets.com/favicons/favicon.svg'}]
-            .forEach(o => {
-                const t = document.createElement('div');
-                t.style.textAlign = "center";
-                t.innerHTML = `<img src="${o.i}" style="width:35px;height:35px;border-radius:6px;box-shadow:0 2px 5px rgba(0,0,0,0.3);">
-                               <div style="color:white;font-size:10px;margin-top:2px;text-shadow:1px 1px 2px #000;">${o.n}</div>`;
-                icons.appendChild(t);
-            });
-            document.body.prepend(icons);
-        }
+/* --- 模拟窗口标题栏 --- */
+#header {
+    display: flex !important;
+    flex-direction: row !important; /* 强制横向排列 */
+    align-items: center !important;
+    position: fixed !important;
+    top: 40px;
+    left: 5%;
+    width: 90%;
+    height: 44px; /* 稍微加高一点方便点击 */
+    background: #dee1e6 !important;
+    border: 1px solid #999 !important;
+    border-radius: 8px 8px 0 0 !important;
+    padding: 0 10px !important;
+    z-index: 10001 !important;
+    box-sizing: border-box !important;
+}
 
-        // 2. 注入控制按钮 (直接放入 header 末尾)
-        if (!document.getElementById('win-btn-group')) {
-            const btnGroup = document.createElement('div');
-            btnGroup.id = 'win-btn-group';
-            btnGroup.style.cssText = "display:flex;gap:12px;margin-left:10px;flex-shrink:0;z-index:10005;";
+/* 修复头像与标题在一行 */
+.avatar {
+    width: 28px !important;
+    height: 28px !important;
+    margin-right: 8px !important;
+    flex-shrink: 0 !important;
+}
+.blogTitle {
+    display: inline-block !important;
+    font-size: 14px !important;
+    color: #333 !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1 !important;
+    margin: 0 !important;
+}
 
-            const acts = [
-                ['—', () => { if(c) c.style.display = (c.style.display==='none'?'block':'none'); }],
-                ['▢', () => { if(c){c.style.display='block'; c.style.left='5%'; c.style.top='84px';} h.style.left='5%'; h.style.top='40px'; }],
-                ['×', () => { location.reload(); }]
-            ];
+/* --- 文章列表内容区 --- */
+#content, .main, .list-content {
+    display: block !important;
+    position: fixed !important;
+    top: 84px; /* header高度44 + top40 */
+    left: 5%;
+    width: 90%;
+    height: calc(100% - 130px) !important;
+    background: #fff !important;
+    border: 1px solid #999 !important;
+    border-top: none !important;
+    border-radius: 0 0 8px 8px !important;
+    z-index: 10000 !important;
+    overflow-y: auto !important;
+    padding: 15px !important;
+    box-sizing: border-box !important;
+}
 
-            acts.forEach(([txt, fn]) => {
-                const b = document.createElement('div');
-                b.innerText = txt;
-                b.style.cssText = "cursor:pointer;padding:5px 8px;font-size:16px;color:#5f6368;font-weight:bold;line-height:1;user-select:none;";
-                b.onclick = (e) => { e.preventDefault(); e.stopPropagation(); fn(); };
-                btnGroup.appendChild(b);
-            });
-            h.appendChild(btnGroup);
-        }
-    };
-
-    if (document.readyState === 'complete') runDesktopJS();
-    else window.addEventListener('load', runDesktopJS);
-})();
+/* 彻底清除可能挡住点击的元素 */
+.title-right, .subTitle, #footer, .SideNav, .Header-item--full { display: none !important; }
