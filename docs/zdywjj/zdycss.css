@@ -2,24 +2,21 @@
 :root {--bg-main: #f0f2f5; --win-bg: #ffffff; --win-border: #999; --header-bg: #dee1e6; --text-p: #333;}
 [data-color-mode='dark'] {--bg-main: #0d1117; --win-bg: #161b22; --win-border: #444; --header-bg: #30363d; --text-p: #adbac7;}
 
-/* 整体背景拉伸：整合你要求的 body 90% 限制 */
+/* 整体背景：设定 body 统一为 97% 并居中 */
 html, body, #main, .Gmeek-mainindex {
     background: var(--bg-main)!important; 
-    margin:0!important; 
+    margin:0 auto!important; 
     height:auto!important; 
     min-height:100vh!important; 
     display: block!important;
-    max-width: 90% !important; /* 按照你的要求设置为 90% */
-    margin-left: auto !important; /* 配合 auto 实现 body 整体居中 */
-    margin-right: auto !important;
+    max-width: 97% !important; 
 }
 
-/* 模拟窗口头部：宽度跟随 body，在大屏下更开阔 */
+/* 模拟窗口头部：统一 97% 逻辑 */
 #header {
     display:flex!important; 
     align-items:center!important; 
-    width:100%!important; /* 因为父级已经 90% 了，这里设为 100% 填满父级 */
-    max-width:1200px!important; /* 建议保留一个最大上限，否则超大屏下文字太长难阅读 */
+    width:100%!important; /* 填满父级 body 的 97% */
     height:44px!important; 
     margin:45px auto 0 auto!important; 
     background:var(--header-bg)!important; 
@@ -31,11 +28,10 @@ html, body, #main, .Gmeek-mainindex {
     z-index:1001!important;
 }
 
-/* 核心：白色主体 */
+/* 模拟窗口主体：内容随外壳一起拉伸至 97% */
 #content, .main, .list-content {
     display:block!important; 
     width:100%!important; 
-    max-width:1200px!important; 
     margin:0 auto!important; 
     background:var(--win-bg)!important; 
     border-left:1px solid var(--win-border)!important; 
@@ -52,7 +48,6 @@ html, body, #main, .Gmeek-mainindex {
 #footer {
     display:block!important; 
     width:100%!important; 
-    max-width:1200px!important; 
     margin:0 auto 60px auto!important; 
     background:var(--win-bg)!important; 
     border:1px solid var(--win-border)!important; 
