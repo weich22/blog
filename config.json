@@ -1,6 +1,8 @@
 {
     "title":"Blog Title",
     "subTitle":"移植测试博客",
+    "homeUrl":"https://g.weich.ee/blog",
+    "urlMode":"issue",
     "avatarUrl":"https://github.githubassets.com/favicons/favicon.svg",
     "allHead":"<link rel=\"stylesheet\" href='/blog/zdywjj/zdycss.css'><script src='/blog/zdywjj/zdyjs.js'></script>",
     "GMEEK_VERSION":"last"
