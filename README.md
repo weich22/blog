@@ -1,6 +1,6 @@
-# Blog Title :link: https://weich22.github.io/blog 
-### :page_facing_up: [1](https://weich22.github.io/blog/tag.html) 
+# Blog Title :link: https://g.weich.ee/blog 
+### :page_facing_up: [1](https://g.weich.ee/blog/tag.html) 
 ### :speech_balloon: 0 
 ### :hibiscus: 2 
-### :alarm_clock: 2026-03-16 10:59:34 
+### :alarm_clock: 2026-03-16 11:01:20 
 ### Powered by :heart: [Gmeek](https://github.com/Meekdai/Gmeek)
